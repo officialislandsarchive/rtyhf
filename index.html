@@ -1,69 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jumpscare</title>
+  <meta name="viewport" content="width=device-width">
   <style>
     body {
       margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: black;
+      background: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
-    #jumpscare {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    #volume-booster-visusalizer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .sound {
+      display: flex;
+      align-items: center;
+      margin-right: 10px;
+    }
+    .sound-wave {
+      width: 5px;
+      height: 20px;
+      margin: 0 2px;
+      background: #fff;
+      animation: bounce 1s infinite;
+    }
+    .sound-wave_one { animation-delay: 0s; }
+    .sound-wave_two { animation-delay: 0.2s; }
+    .sound-wave_three { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 100% { height: 10px; }
+      50% { height: 30px; }
+    }
+    .segments-box {
+      display: flex;
+    }
+    .segment {
+      width: 20px;
+      height: 20px;
+      background: #333;
+      margin: 0 2px;
+      position: relative;
+    }
+    .segment span {
+      display: block;
       width: 100%;
       height: 100%;
-      z-index: 9999;
+      background: #f00;
+      opacity: 0;
+      animation: fill 2s infinite;
     }
-    #jumpscare img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    @keyframes fill {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
     }
   </style>
 </head>
 <body>
-  <div id="jumpscare">
-    <img src="https://cdn.discordapp.com/attachments/1204623503169556520/1316632718154534922/scary-ghost-on-dark-background.png?ex=675bc145&is=675a6fc5&hm=75b285965f9e406a341e4d186f4bc8d6cbd1d6d43000e357b682b23127f65b0c&" alt="Jumpscare">
-    <audio id="scream-audio">
-      <source src="https://cdn.onlyfans.wtf/content/videos/Jeff_The_Killer.mp4" type="audio/mpeg">
-    </audio>
+  <video id="video-player" autoplay name="media" controls>
+    <source src="https://cdn.onlyfans.wtf/content/videos/Jeff_The_Killer.mp4" type="video/mp4">
+  </video>
+
+  <audio class="audio-output" style="display: none;"></audio>
+
+  <div id="volume-booster-visusalizer">
+    <div class="sound">
+      <div class="sound-icon"></div>
+      <div class="sound-wave sound-wave_one"></div>
+      <div class="sound-wave sound-wave_two"></div>
+      <div class="sound-wave sound-wave_three"></div>
+    </div>
+    <div class="segments-box">
+      <div data-range="1-20" class="segment"><span></span></div>
+      <div data-range="21-40" class="segment"><span></span></div>
+      <div data-range="41-60" class="segment"><span></span></div>
+      <div data-range="61-80" class="segment"><span></span></div>
+      <div data-range="81-100" class="segment"><span></span></div>
+    </div>
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const audio = document.getElementById('scream-audio');
-      const jumpscare = document.getElementById('jumpscare');
+    document.addEventListener('DOMContentLoaded', () => {
+      const video = document.getElementById('video-player');
+      
+      // Ensure the volume is at maximum
+      video.volume = 1.0;
 
-      audio.volume = 1.0;
-
-      function requestFullscreen() {
-        const docEl = document.documentElement;
-        if (docEl.requestFullscreen) {
-          docEl.requestFullscreen();
-        } else if (docEl.mozRequestFullScreen) {
-          docEl.mozRequestFullScreen();
-        } else if (docEl.webkitRequestFullscreen) {
-          docEl.webkitRequestFullscreen();
-        } else if (docEl.msRequestFullscreen) {
-          docEl.msRequestFullscreen();
-        }
-      }
-
-      document.body.addEventListener('click', () => {
-        audio.play().catch(error => {
-          console.error("Failed to play audio:", error);
+      // Optional: Add a visual effect
+      setInterval(() => {
+        const soundWaves = document.querySelectorAll('.sound-wave');
+        soundWaves.forEach(wave => {
+          wave.style.height = `${Math.random() * 30 + 10}px`;
         });
-        requestFullscreen();
-      });
-
-      jumpscare.style.display = 'block';
-      alert("Click anywhere to start the experience!");
+      }, 200);
     });
   </script>
 </body>
