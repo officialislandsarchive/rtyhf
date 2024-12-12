@@ -30,15 +30,40 @@
 <body>
   <div id="jumpscare">
     <img src="https://cdn.discordapp.com/attachments/1204623503169556520/1316632718154534922/scary-ghost-on-dark-background.png?ex=675bc145&is=675a6fc5&hm=75b285965f9e406a341e4d186f4bc8d6cbd1d6d43000e357b682b23127f65b0c&" alt="Jumpscare">
-    <audio autoplay>
+    <audio id="scream-audio">
       <source src="https://cdn.onlyfans.wtf/content/videos/Jeff_The_Killer.mp4" type="audio/mpeg">
     </audio>
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
+      const audio = document.getElementById('scream-audio');
       const jumpscare = document.getElementById('jumpscare');
+
+      audio.volume = 1.0;
+
+      function requestFullscreen() {
+        const docEl = document.documentElement;
+        if (docEl.requestFullscreen) {
+          docEl.requestFullscreen();
+        } else if (docEl.mozRequestFullScreen) {
+          docEl.mozRequestFullScreen();
+        } else if (docEl.webkitRequestFullscreen) {
+          docEl.webkitRequestFullscreen();
+        } else if (docEl.msRequestFullscreen) {
+          docEl.msRequestFullscreen();
+        }
+      }
+
+      document.body.addEventListener('click', () => {
+        audio.play().catch(error => {
+          console.error("Failed to play audio:", error);
+        });
+        requestFullscreen();
+      });
+
       jumpscare.style.display = 'block';
+      alert("Click anywhere to start the experience!");
     });
   </script>
 </body>
