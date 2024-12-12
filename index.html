@@ -7,39 +7,64 @@
         body {
             margin: 0;
             background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
         }
         video {
             width: 100vw;
             height: 100vh;
             object-fit: cover;
+            display: none;
+        }
+        #start-button {
+            font-size: 24px;
+            padding: 15px 30px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
-    <video id="scare-video" autoplay muted></video>
+    <video id="scare-video">
+        <source src="https://cdn.onlyfans.wtf/content/videos/Jeff_The_Killer.mp4" type="video/mp4">
+    </video>
+    <button id="start-button">Click to Start</button>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const video = document.getElementById("scare-video");
+        const video = document.getElementById("scare-video");
+        const button = document.getElementById("start-button");
 
-            video.src = "https://cdn.onlyfans.wtf/content/videos/Jeff_The_Killer.mp4";
-            video.type = "video/mp4";
-
+        // Function to maximize volume and play fullscreen
+        const playJumpScare = () => {
             video.muted = false;
             video.volume = 1.0;
+            video.style.display = "block"; // Show the video
 
-            const requestFullScreen = () => {
+            // Play the video
+            video.play().then(() => {
+                // Enter fullscreen
                 if (video.requestFullscreen) {
                     video.requestFullscreen();
-                } else if (video.webkitRequestFullscreen) {
+                } else if (video.webkitRequestFullscreen) { // Safari
                     video.webkitRequestFullscreen();
-                } else if (video.msRequestFullscreen) {
+                } else if (video.msRequestFullscreen) { // IE/Edge
                     video.msRequestFullscreen();
                 }
-            };
+            }).catch(err => {
+                console.error("Error playing video:", err);
+            });
+        };
 
-            video.play()
-                .then(requestFullScreen)
-                .catch(err => console.error("Error playing video:", err));
+        // Event listener for button click
+        button.addEventListener("click", () => {
+            button.style.display = "none"; // Hide the button
+            playJumpScare(); // Start the jump scare
         });
     </script>
 </body>
